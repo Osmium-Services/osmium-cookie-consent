@@ -1,8 +1,13 @@
 <?php // Included via ServiceThemeBlocks::render('head', [...]) by a real theme's own
 // <head> template - see OsmiumController::setServiceThemeBlocks(). Expects
 // $cookieConsent (this service's own config, e.g. ['cookieName' => string]).
-// Exposes the cookie name to assets/js/site-modal.js (the accept/reject/ribbon
-// behaviour) and to Analytics' own headscript, which reads it for Consent Mode. ?>
+//
+// window.OsmiumCookieConsent.cookieName is a public, documented client-side
+// contract - assets/js/site-modal.js (this service's own accept/reject/ribbon
+// behaviour) reads it, and any other script may choose to as well (e.g.
+// Analytics' headscript optionally grants Consent Mode based on it). This
+// service has no PHP-level awareness of what, if anything, reads the global -
+// the two stay independently installable. ?>
 <script>
 window.OsmiumCookieConsent = { cookieName: '<?php echo $cookieConsent['cookieName'] ?? 'osmium_cookie_consent'; ?>' };
 </script>

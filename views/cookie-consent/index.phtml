@@ -1,0 +1,151 @@
+<div class="d-flex justify-content-between align-items-center py-3 mb-4">
+    <h4 class="mb-0">
+        <span class="text-muted fw-light">Services /</span> Cookie Consent
+    </h4>
+    <button type="submit" form="settings-form" class="btn btn-primary">
+        <i class="bx bx-save me-1"></i> Save Settings
+    </button>
+</div>
+
+<?php if ($admin['settingsSaved']): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        Settings saved successfully!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<?php endif; ?>
+
+<?php if ($admin['settingsError'] ?? false): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <?= \htmlspecialchars($admin['settingsError'] ?? '') ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<?php endif; ?>
+
+<form method="POST" action="<?= $admin['basePath'] ?>settings/cookie-consent/" id="settings-form">
+    <input type="hidden" name="token" value="<?= $template['formToken'] ?? '' ?>">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bx bx-cookie me-2"></i>General</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="enabled" name="enabled"
+                                <?= ($admin['config']['cookieConsent']['enabled'] ?? false) ? 'checked' : '' ?>>
+                            <label class="form-check-label fw-semibold" for="enabled">Enabled</label>
+                        </div>
+                        <div class="form-text">Turns off the banner and status ribbon (production only). Disabled by default until a theme calls ServiceThemeBlocks::render('body-end', ...).</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="cookie_name" class="form-label fw-semibold">Cookie Name</label>
+                        <input type="text" class="form-control" id="cookie_name" name="cookie_name"
+                            value="<?= \htmlspecialchars($admin['config']['cookieConsent']['cookieName'] ?? '') ?>">
+                        <div class="form-text text-danger">Changing this re-prompts every existing visitor for consent again.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="privacy_page_search" class="form-label fw-semibold">Privacy Notice URL</label>
+                        <input type="text" class="form-control" id="privacy_page_search" name="privacy_url"
+                            list="privacy_pages_list" placeholder="Type to search pages, or paste a full URL..."
+                            value="<?= \htmlspecialchars($admin['privacyUrlDisplay'] ?? '') ?>">
+                        <datalist id="privacy_pages_list">
+                            <?php foreach ($admin['pages'] as $page): ?>
+                                <option value="/<?= \htmlspecialchars($page['url'] ?? '') ?>/ - <?= \htmlspecialchars($page['title'] ?? '') ?>"
+                                    data-id="<?= $page['id'] ?>">
+                            <?php endforeach; ?>
+                        </datalist>
+                        <input type="hidden" id="privacy_page_id" name="privacy_page_id" value="">
+                        <div class="form-text">Search for a page, or paste any full URL.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bx bx-palette me-2"></i>Colors</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="color_accent" class="form-label fw-semibold">Accent Color (ribbon)</label>
+                        <input type="text" class="form-control" id="color_accent" name="color_accent"
+                            value="<?= \htmlspecialchars($admin['config']['cookieConsent']['colors']['accent'] ?? '') ?>">
+                        <div class="form-text">Hex value, e.g. #0d6efd</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="color_modal_bg" class="form-label fw-semibold">Modal Background Color</label>
+                        <input type="text" class="form-control" id="color_modal_bg" name="color_modal_bg"
+                            value="<?= \htmlspecialchars($admin['config']['cookieConsent']['colors']['modalBg'] ?? '') ?>">
+                        <div class="form-text">Hex value, e.g. #1a1a1a</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bx bx-message-square-detail me-2"></i>Copy</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="banner_text" class="form-label fw-semibold">Banner Text</label>
+                        <textarea class="form-control" id="banner_text" name="banner_text" rows="3"><?= \htmlspecialchars($admin['config']['cookieConsent']['copy']['bannerText'] ?? '') ?></textarea>
+                        <div class="form-text">Use {privacyUrl} as a placeholder. HTML is allowed (e.g. the privacy notice link).</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="status_text" class="form-label fw-semibold">Status Text (ribbon review modal)</label>
+                        <textarea class="form-control" id="status_text" name="status_text" rows="3"><?= \htmlspecialchars($admin['config']['cookieConsent']['copy']['statusText'] ?? '') ?></textarea>
+                        <div class="form-text">Use {status} and {privacyUrl} as placeholders.</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label for="accept_label" class="form-label fw-semibold">Accept Button Label</label>
+                            <input type="text" class="form-control" id="accept_label" name="accept_label"
+                                value="<?= \htmlspecialchars($admin['config']['cookieConsent']['copy']['acceptLabel'] ?? '') ?>">
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label for="reject_label" class="form-label fw-semibold">Reject Button Label</label>
+                            <input type="text" class="form-control" id="reject_label" name="reject_label"
+                                value="<?= \htmlspecialchars($admin['config']['cookieConsent']['copy']['rejectLabel'] ?? '') ?>">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="ribbon_title" class="form-label fw-semibold">Ribbon Title (tooltip)</label>
+                        <input type="text" class="form-control" id="ribbon_title" name="ribbon_title"
+                            value="<?= \htmlspecialchars($admin['config']['cookieConsent']['copy']['ribbonTitle'] ?? '') ?>">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="ribbon_aria_label" class="form-label fw-semibold">Ribbon Aria Label (accessibility)</label>
+                        <input type="text" class="form-control" id="ribbon_aria_label" name="ribbon_aria_label"
+                            value="<?= \htmlspecialchars($admin['config']['cookieConsent']['copy']['ribbonAriaLabel'] ?? '') ?>">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+// Privacy Notice page search datalist handler
+document.getElementById('privacy_page_search').addEventListener('input', function() {
+    const val = this.value;
+    const options = document.querySelectorAll('#privacy_pages_list option');
+    let foundId = '';
+
+    options.forEach(opt => {
+        if (opt.value === val) {
+            foundId = opt.dataset.id;
+        }
+    });
+
+    document.getElementById('privacy_page_id').value = foundId;
+});
+</script>

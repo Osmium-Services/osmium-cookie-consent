@@ -1,0 +1,65 @@
+{
+    "id": "cookie-consent",
+    "name": "Cookie Consent",
+    "version": "1.0.0",
+    "description": "GDPR-style cookie consent banner and status ribbon, production-only, with an admin-editable cookie name/privacy URL/colors/copy",
+    "author": {
+        "name": "Gavin Cox"
+    },
+    "license": "proprietary",
+
+    "requires": {
+        "osmium": ">=1.0.0",
+        "php": ">=8.1",
+        "services": []
+    },
+
+    "autoload": [
+        "models"
+    ],
+
+    "admin": {
+        "menu": {
+            "section": "Content",
+            "items": [
+                {
+                    "id": "cookie-consent",
+                    "label": "Cookie Consent",
+                    "icon": "bx bx-cookie",
+                    "route": "admin/settings/cookie-consent",
+                    "activePattern": "admin/settings/cookie-consent",
+                    "role": null
+                }
+            ]
+        },
+        "routes": {
+            "admin/settings/cookie-consent": {
+                "controller": "controllers/CookieConsentController.php",
+                "class": "Osmium\\Services\\CookieConsent\\Controllers\\CookieConsentController",
+                "method": "index",
+                "title": "Cookie Consent"
+            }
+        }
+    },
+
+    "frontend": {
+        "themeBlocks": [
+            {
+                "hook": "head",
+                "file": "theme/cookie-consent-config.phtml"
+            },
+            {
+                "hook": "body-end",
+                "file": "theme/cookie-consent-banner.phtml"
+            },
+            {
+                "hook": "body-end",
+                "file": "theme/cookie-consent-ribbon.phtml"
+            }
+        ]
+    },
+
+    "setup": {
+        "postInstallNote": "Disabled by default. The 'head' hook (cookie name + Consent Mode wiring for Analytics, if also installed) is live-wired into osmium-base's homepage. The 'body-end' hook (banner + status ribbon markup) has no theme calling it yet - a real theme must call ServiceThemeBlocks::render('body-end', ['cookieConsent' => ..., 'site' => $site]) near </body>, and include assets/js/site-modal.js for the accept/reject/ribbon behaviour."
+    }
+}

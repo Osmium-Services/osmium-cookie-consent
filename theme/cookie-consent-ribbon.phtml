@@ -1,0 +1,25 @@
+<?php // Included via ServiceThemeBlocks::render('body-end', [...]) by a real theme,
+// near </body> - no theme calls this hook yet (see service.json's
+// postInstallNote). Expects $cookieConsent (this service's own config) and
+// $site (for the environment check and FQDN). Pairs with
+// assets/js/site-modal.js for the ribbon/status-review behaviour. ?>
+<?php if (($cookieConsent['enabled'] ?? false) && !in_array($site['environment'] ?? '', ['dev', 'staging'], true)): // production only ?>
+<button type="button" id="site-status-toggle" class="site-status-toggle"
+    aria-label="<?php echo $cookieConsent['copy']['ribbonAriaLabel']; ?>" title="<?php echo $cookieConsent['copy']['ribbonTitle']; ?>">🍪</button>
+
+<div id="site-status-backdrop" class="site-overlay-backdrop" hidden></div>
+<div id="site-status-dialog" class="site-overlay-dialog" role="dialog" aria-modal="true"
+    aria-label="<?php echo $cookieConsent['copy']['ribbonTitle']; ?>" hidden>
+    <p><?php echo str_replace('{status}', '<strong id="site-status-value">unknown</strong>', str_replace('{privacyUrl}', ($site['FQDN'] ?? '') . $cookieConsent['privacyUrl'], $cookieConsent['copy']['statusText'])); ?></p>
+    <div class="site-overlay-dialog_actions">
+        <button type="button" id="site-status-reject" class="site-overlay-dialog_btn"><?php echo $cookieConsent['copy']['rejectLabel']; ?></button>
+        <button type="button" id="site-status-accept" class="site-overlay-dialog_btn"><?php echo $cookieConsent['copy']['acceptLabel']; ?></button>
+    </div>
+</div>
+<?php endif; ?>
+<style>
+:root {
+    --site-overlay-bg: <?php echo $cookieConsent['colors']['modalBg']; ?>;
+    --site-overlay-accent: <?php echo $cookieConsent['colors']['accent']; ?>;
+}
+</style>

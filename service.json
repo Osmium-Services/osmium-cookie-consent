@@ -1,8 +1,9 @@
 {
     "id": "cookie-consent",
     "name": "Cookie Consent",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "GDPR-style cookie consent banner and status ribbon, production-only, with an admin-editable cookie name/privacy URL/colors/copy",
+    "category": "security-privacy",
     "author": {
         "name": "Gavin Cox"
     },

@@ -3,11 +3,27 @@
 // $cookieConsent (this service's own config, e.g. ['cookieName' => string]).
 //
 // window.OsmiumCookieConsent.cookieName is a public, documented client-side
-// contract - assets/js/site-modal.js (this service's own accept/reject/ribbon
+// contract - public/site-modal.js (this service's own accept/reject/ribbon
 // behaviour) reads it, and any other script may choose to as well (e.g.
 // Analytics' headscript optionally grants Consent Mode based on it). This
 // service has no PHP-level awareness of what, if anything, reads the global -
-// the two stay independently installable. ?>
+// the two stay independently installable.
+//
+// This block also loads the service's own site-modal.css and site-modal.js (copied to
+// assets/services/cookie-consent/ on install), but only when the banner and ribbon can
+// render: enabled, and not dev/staging. Expects $site for the environment check. ?>
+<?php
+$assetsNeeded = ($cookieConsent['enabled'] ?? false) && !\in_array($site['environment'] ?? '', ['dev', 'staging'], true);
+$base = '/assets/services/cookie-consent';
+$version = static function (string $file) use ($base): string {
+    $path = ($_SERVER['DOCUMENT_ROOT'] ?? '') . "{$base}/{$file}";
+    return \is_file($path) ? '?v=' . \filemtime($path) : '';
+};
+?>
 <script>
 window.OsmiumCookieConsent = { cookieName: '<?php echo $cookieConsent['cookieName'] ?? 'osmium_cookie_consent'; ?>' };
 </script>
+<?php if ($assetsNeeded): ?>
+<link rel="stylesheet" href="<?= $base ?>/site-modal.css<?= $version('site-modal.css') ?>">
+<script src="<?= $base ?>/site-modal.js<?= $version('site-modal.js') ?>" defer></script>
+<?php endif; ?>

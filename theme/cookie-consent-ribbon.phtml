@@ -2,7 +2,7 @@
 // near </body> - no theme calls this hook yet (see service.json's
 // postInstallNote). Expects $cookieConsent (this service's own config) and
 // $site (for the environment check and FQDN). Pairs with
-// assets/js/site-modal.js for the ribbon/status-review behaviour. ?>
+// public/site-modal.js for the ribbon/status-review behaviour (loaded by the head block). ?>
 <?php if (($cookieConsent['enabled'] ?? false) && !in_array($site['environment'] ?? '', ['dev', 'staging'], true)): // production only ?>
 <button type="button" id="site-status-toggle" class="site-status-toggle"
     aria-label="<?php echo $cookieConsent['copy']['ribbonAriaLabel']; ?>" title="<?php echo $cookieConsent['copy']['ribbonTitle']; ?>">🍪</button>

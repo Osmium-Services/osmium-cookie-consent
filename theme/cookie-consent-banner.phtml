@@ -2,7 +2,7 @@
 // near </body> - no theme calls this hook yet (see service.json's
 // postInstallNote). Expects $cookieConsent (this service's own config) and
 // $site (for the environment check and FQDN). Pairs with
-// assets/js/site-modal.js for the accept/reject behaviour. ?>
+// public/site-modal.js for the accept/reject behaviour (loaded by the head block). ?>
 <?php if (($cookieConsent['enabled'] ?? false) && !in_array($site['environment'] ?? '', ['dev', 'staging'], true) && !isset($_COOKIE[$cookieConsent['cookieName']])): // production only ?>
 <div id="site-welcome-backdrop" class="site-overlay-backdrop"></div>
 <div id="site-welcome-dialog" class="site-overlay-dialog" role="dialog" aria-modal="true" aria-live="polite" aria-label="Cookie consent">
@@ -13,7 +13,7 @@
 	</div>
 </div>
 <?php // .site-overlay-backdrop / .site-overlay-dialog styles live in site-modal.css, loaded
-      // globally via html-head.phtml once a storefront theme exists. Only the admin-configurable
+      // by the head block (cookie-consent-config.phtml). Only the admin-configurable
       // colors are set inline, by cookie-consent-ribbon.phtml (which always renders; this block
       // doesn't once the consent cookie is set). IDs/classes here are deliberately generic (not
       // "cookie-consent-*") so browser cookie-notice blockers (e.g. Brave Shields) don't

@@ -20,7 +20,7 @@ $version = static function (string $file) use ($base): string {
     return \is_file($path) ? '?v=' . \filemtime($path) : '';
 };
 ?>
-<script>
+<script nonce="<?= $cspNonce ?? '' ?>">
 window.OsmiumCookieConsent = { cookieName: '<?php echo $cookieConsent['cookieName'] ?? 'osmium_cookie_consent'; ?>' };
 </script>
 <?php if ($assetsNeeded): ?>

@@ -133,7 +133,7 @@
     </div>
 </form>
 
-<script>
+<script nonce="<?= $cspNonce ?? '' ?>">
 // Privacy Notice page search datalist handler
 document.getElementById('privacy_page_search').addEventListener('input', function() {
     const val = this.value;

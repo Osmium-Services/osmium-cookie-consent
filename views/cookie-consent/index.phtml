@@ -70,15 +70,21 @@
                 <div class="card-body">
                     <div class="mb-3">
                         <label for="color_accent" class="form-label fw-semibold">Accent Color (ribbon)</label>
-                        <input type="text" class="form-control" id="color_accent" name="color_accent"
-                            value="<?= \htmlspecialchars($admin['config']['cookieConsent']['colors']['accent'] ?? '') ?>">
+                        <div class="d-flex gap-2">
+                            <input type="color" class="form-control form-control-color flex-shrink-0" data-color-for="color_accent" value="#0d6efd" aria-label="Pick color">
+                            <input type="text" class="form-control" id="color_accent" name="color_accent"
+                                value="<?= \htmlspecialchars($admin['config']['cookieConsent']['colors']['accent'] ?? '') ?>">
+                        </div>
                         <div class="form-text">Hex value, e.g. #0d6efd</div>
                     </div>
 
                     <div class="mb-3">
                         <label for="color_modal_bg" class="form-label fw-semibold">Modal Background Color</label>
-                        <input type="text" class="form-control" id="color_modal_bg" name="color_modal_bg"
-                            value="<?= \htmlspecialchars($admin['config']['cookieConsent']['colors']['modalBg'] ?? '') ?>">
+                        <div class="d-flex gap-2">
+                            <input type="color" class="form-control form-control-color flex-shrink-0" data-color-for="color_modal_bg" value="#1a1a1a" aria-label="Pick color">
+                            <input type="text" class="form-control" id="color_modal_bg" name="color_modal_bg"
+                                value="<?= \htmlspecialchars($admin['config']['cookieConsent']['colors']['modalBg'] ?? '') ?>">
+                        </div>
                         <div class="form-text">Hex value, e.g. #1a1a1a</div>
                     </div>
                 </div>
@@ -147,5 +153,14 @@ document.getElementById('privacy_page_search').addEventListener('input', functio
     });
 
     document.getElementById('privacy_page_id').value = foundId;
+});
+
+// Colour pickers stay in sync with their hex fields
+document.querySelectorAll('input[type="color"][data-color-for]').forEach(picker => {
+    const field = document.getElementById(picker.dataset.colorFor);
+    const sync = () => { if (/^#[0-9a-f]{6}$/i.test(field.value)) picker.value = field.value; };
+    sync();
+    field.addEventListener('input', sync);
+    picker.addEventListener('input', () => { field.value = picker.value; });
 });
 </script>

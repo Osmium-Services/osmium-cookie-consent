@@ -17,8 +17,17 @@
     }
 
     var banner = document.getElementById('site-welcome-dialog');
+    var bannerBackdrop = document.getElementById('site-welcome-backdrop');
+
+    // A cached page can still carry the banner (the server leaves it out only when it sees the cookie), so a visitor
+    // who has already chosen drops it here.
+    if (banner && getConsentCookie()) {
+        banner.remove();
+        if (bannerBackdrop) bannerBackdrop.remove();
+        banner = null;
+    }
+
     if (banner) {
-        var bannerBackdrop = document.getElementById('site-welcome-backdrop');
 
         function dismissBanner() {
             banner.remove();

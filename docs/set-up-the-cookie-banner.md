@@ -1,6 +1,7 @@
 ---
 title: Set up the cookie consent banner
 tags: cookies, consent, gdpr, banner, privacy, accept, reject, ribbon
+page: admin/settings/cookie-consent
 ---
 
 **Cookie Consent** shows a banner asking visitors to accept or reject cookies, and a status ribbon where they can review their choice. It only appears on the live site, not in development.
